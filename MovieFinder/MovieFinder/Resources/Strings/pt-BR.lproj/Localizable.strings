@@ -5,3 +5,13 @@
   Created by Bruno Moura on 18/01/25.
   
 */
+
+// MARK: - Useful
+"useful.cancel" = "Cancelar";
+"useful.confirm" = "Confirmar";
+"useful.ok" = "Ok";
+"useful.tryAgain" = "Tentar Novamente";
+
+// MARK: - Home
+"home.description" = "Aqui você acompanha os filmes que estão bombando nos cinemas!";
+"home.button.title" = "Quero começar!";
