@@ -12,10 +12,11 @@
 		3FD628532D3BE93E0059116F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6284D2D3BE93E0059116F /* SceneDelegate.swift */; };
 		3FD628542D3BE93E0059116F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6284E2D3BE93E0059116F /* ViewController.swift */; };
 		3FD628552D3BE93E0059116F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FD628482D3BE93E0059116F /* Assets.xcassets */; };
-		3FD628572D3BE93E0059116F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6284B2D3BE93E0059116F /* LaunchScreen.storyboard */; };
 		3FD6285A2D3BE9420059116F /* MovieFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD628582D3BE9420059116F /* MovieFinderTests.swift */; };
 		3FD6285E2D3BE9440059116F /* MovieFinderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6285B2D3BE9440059116F /* MovieFinderUITests.swift */; };
 		3FD6285F2D3BE9440059116F /* MovieFinderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FD6285C2D3BE9440059116F /* MovieFinderUITestsLaunchTests.swift */; };
+		3FD628702D3BECA50059116F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FD6286F2D3BECA40059116F /* LaunchScreen.storyboard */; };
+		3FD628732D3BECD00059116F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3FD628712D3BECD00059116F /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,13 +43,15 @@
 		3FD628472D3BE93E0059116F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3FD628482D3BE93E0059116F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3FD628492D3BE93E0059116F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3FD6284A2D3BE93E0059116F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FD6284D2D3BE93E0059116F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3FD6284E2D3BE93E0059116F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		3FD628502D3BE93E0059116F /* MovieFinder.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MovieFinder.xcdatamodel; sourceTree = "<group>"; };
 		3FD628582D3BE9420059116F /* MovieFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFinderTests.swift; sourceTree = "<group>"; };
 		3FD6285B2D3BE9440059116F /* MovieFinderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFinderUITests.swift; sourceTree = "<group>"; };
 		3FD6285C2D3BE9440059116F /* MovieFinderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFinderUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3FD6286F2D3BECA40059116F /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3FD628722D3BECD00059116F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3FD628742D3BECDF0059116F /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,7 +187,7 @@
 			children = (
 				3FD628472D3BE93E0059116F /* AppDelegate.swift */,
 				3FD6284D2D3BE93E0059116F /* SceneDelegate.swift */,
-				3FD6284B2D3BE93E0059116F /* LaunchScreen.storyboard */,
+				3FD6286F2D3BECA40059116F /* LaunchScreen.storyboard */,
 			);
 			path = Aplication;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 		3FD628682D3BE9E70059116F /* Strings */ = {
 			isa = PBXGroup;
 			children = (
+				3FD628712D3BECD00059116F /* Localizable.strings */,
 			);
 			path = Strings;
 			sourceTree = "<group>";
@@ -333,11 +337,11 @@
 				};
 			};
 			buildConfigurationList = 3FD6280B2D3BE8ED0059116F /* Build configuration list for PBXProject "MovieFinder" */;
-			developmentRegion = en;
+			developmentRegion = "pt-BR";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
+				"pt-BR",
 			);
 			mainGroup = 3FD628072D3BE8ED0059116F;
 			minimizedProjectReferenceProxies = 1;
@@ -359,7 +363,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FD628552D3BE93E0059116F /* Assets.xcassets in Resources */,
-				3FD628572D3BE93E0059116F /* LaunchScreen.storyboard in Resources */,
+				3FD628732D3BECD00059116F /* Localizable.strings in Resources */,
+				3FD628702D3BECA50059116F /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,12 +429,13 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3FD6284B2D3BE93E0059116F /* LaunchScreen.storyboard */ = {
+		3FD628712D3BECD00059116F /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				3FD6284A2D3BE93E0059116F /* Base */,
+				3FD628722D3BECD00059116F /* en */,
+				3FD628742D3BECDF0059116F /* pt-BR */,
 			);
-			name = LaunchScreen.storyboard;
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -494,6 +500,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -557,6 +564,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
