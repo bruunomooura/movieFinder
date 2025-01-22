@@ -15,3 +15,12 @@
 // MARK: - Home
 "home.description" = "Aqui você acompanha os filmes que estão bombando nos cinemas!";
 "home.button.title" = "Quero começar!";
+
+// MARK: - MovieDetails
+"movieDetails.searchBar.placeholder" = "Buscar filme por titulo";
+"movieDetails.searchBar.accessibilityHint" = "Informe aqui o titulo do filme para efetuar a busca na lista";
+"movieDetails.title.noResults" = "Nenhum filme \nencontrado";
+"movieDetails.noResultsLabel.accessibilityLabel" = "Nenhum filme encontrado";
+"movieDetails.movieTitle.accessibilityLabel" = "Titulo do filme";
+"movieDetails.movieReleaseLabel.accessibilityLabel" = "Ano de lançamento";
+"movieDetails.movieGenresLabel.accessibilityLabel" = "Gênero";

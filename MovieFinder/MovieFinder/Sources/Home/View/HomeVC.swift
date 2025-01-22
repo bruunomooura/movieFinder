@@ -18,6 +18,7 @@ class HomeVC: UIViewController {
         screen?.updateConstraints(for: traitCollection)
         viewModel.delegate(delegate: self)
         viewModel.setupTitles()
+        setupNavigationBar()
         // Do any additional setup after loading the view.
     }
     
@@ -36,9 +37,18 @@ class HomeVC: UIViewController {
     }
 }
 
+// MARK: - HomeScreenDelegate
 extension HomeVC: HomeScreenDelegate {
+    /**
+     Configures the navigation bar appearance and title.
+     */
+    private func setupNavigationBar() {
+        navigationItem.backButtonDisplayMode = .minimal
+    }
+    
     func didTapWelcomeButton() {
-        print("botão tocado")
+        let movieDetailsVC = MovieDetailsVC()
+        navigationController?.pushViewController(movieDetailsVC, animated: true)
     }
 }
 

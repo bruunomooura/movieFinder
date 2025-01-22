@@ -8,11 +8,13 @@
 import Foundation
 
 final class AppConfig {
-    static let currentDevelopmentStatus: DevelopmentStatus = {
+    static let serviceFactory: ServiceFactoryProtocol = {
 #if DEBUG
-        return .development
+        print("Development mode")
+        return DevelopmentServiceFactory()
 #else
-        return .production
+        print("Production mode")
+        return ProductionServiceFactory()
 #endif
     }()
 }
