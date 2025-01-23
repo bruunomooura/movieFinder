@@ -9,6 +9,8 @@ import UIKit
 
 final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
     
+//    weak var delegateMoviePoster: MoviePosterTableViewCellDelegate?
+    weak var delegateMovieHeader: MovieHeaderTableViewCellDelegate?
     private var genresDictionary: [Int: String] = [:]
     private var movieDetails: Movie?
     private var similarMovies: [Movie] = []
@@ -23,27 +25,31 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2 + similarMovies.count
+        return similarMovies.count + 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MoviePosterTableViewCell.identifier, for: indexPath) as? MoviePosterTableViewCell else { return UITableViewCell() }
             
             // Configure a célula da capa usando o objeto `movie` correspondente
             guard let movieDetails = movieDetails else { return UITableViewCell()}
+//            cell.delegate(delegate: delegateMoviePoster)
             cell.configureCell(movie: movieDetails)
+            cell.animateMoviePosterImageView()
             
             return cell
-        } else if indexPath.row == 1 {
+        case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieHeaderTableViewCell.identifier, for: indexPath) as? MovieHeaderTableViewCell else { return UITableViewCell() }
             
             // Configure a célula do cabeçalho usando o mesmo objeto `movie`
             guard let movieDetails = movieDetails else { return UITableViewCell()}
+            cell.delegate(delegate: delegateMovieHeader)
             cell.configureCell(movie: movieDetails)
             
             return cell
-        } else {
+        default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SimilarMovieTableViewCell.identifier, for: indexPath) as? SimilarMovieTableViewCell else { return UITableViewCell() }
             
             // Calcula o índice correto para a lista de filmes similares
@@ -59,11 +65,12 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
 
 extension MoviesDetailsTableViewDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
+        switch indexPath.row {
+        case 0:
             return 250
-        } else if indexPath.row == 1 {
-            return 150
-        } else {
+        case 1:
+            return 140
+        default:
             return 130
         }
     }

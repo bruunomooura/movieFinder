@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GenreServiceManager: TMDBService, GenreServiceProtocol {
+final class GenreServiceManager: TMDBService, GenreServiceProtocol {
     func fetchGenres(language: String) async throws -> GenreResponse {
         guard let url = URL(string: "https://api.themoviedb.org/3/genre/movie/list") else { throw MoviesLoadingError.errorReceivingData }
         

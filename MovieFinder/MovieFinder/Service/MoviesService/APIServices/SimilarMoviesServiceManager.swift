@@ -7,7 +7,7 @@
 
 import Foundation
 
-class SimilarMoviesServiceManager: TMDBService, SimilarMoviesServiceProtocol {
+final class SimilarMoviesServiceManager: TMDBService, SimilarMoviesServiceProtocol {
     func fetchRelatedMovies(movieId: Int, language: String) async throws -> MovieResponse {
         guard let url = URL(string: "https://api.themoviedb.org/3/movie/\(movieId)/similar") else { throw MoviesLoadingError.errorReceivingData }
         

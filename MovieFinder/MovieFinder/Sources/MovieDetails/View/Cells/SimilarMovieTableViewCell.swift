@@ -115,7 +115,7 @@ extension SimilarMovieTableViewCell {
     /// - Parameter genres: A dictionary mapping genre IDs to genre names used to display the movie's genres.
     ///
     public func configureCell(movie: Movie, genres: [Int: String]) {
-        moviePosterImageView.loadImageFromURL(movie.imageURL)
+        moviePosterImageView.loadImageFromURL(movie.imageURL())
         movieTitleLabel.text = movie.title.formatWithLineBreaks(every: 4)
         movieReleaseLabel.text = movie.releaseYear
         movieGenresLabel.text = movie.genreNames(using: genres)

@@ -17,9 +17,6 @@ class MovieDetailsScreen: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
-//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-//        tableView.separatorColor = .clear
-//        tableView.isHidden = true
         tableView.allowsSelection = false
         tableView.register(MoviePosterTableViewCell.self, forCellReuseIdentifier: MoviePosterTableViewCell.identifier)
         tableView.register(MovieHeaderTableViewCell.self, forCellReuseIdentifier: MovieHeaderTableViewCell.identifier)
@@ -63,9 +60,17 @@ extension MovieDetailsScreen {
      
      - Parameter dataSourceAndDelegate: The data source and delegate for the table view.
      */
-    public func setupTableView(_ dataSourceAndDelegate: MoviesDetailsTableViewDataSource) {
+    public func setupTableView(dataSourceAndDelegate: MoviesDetailsTableViewDataSource, contentInsetTop: CGFloat) {
         tableView.delegate = dataSourceAndDelegate
         tableView.dataSource = dataSourceAndDelegate
+//        tableView.contentInset = UIEdgeInsets(top: -contentInsetTop, left: 0, bottom: 0, right: 0)
+        tableView.scrollIndicatorInsets.top = -(contentInsetTop * 2)
+//        tableView.verticalScrollIndicatorInsets.top = -(contentInsetTop * 2)
+//        tableView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        tableView.contentInsetAdjustmentBehavior = .never
+//        tableView.reloadData()
+//        tableView.insetsContentViewsToSafeArea = false
+
     }
         
 //    public func updateConstraints(for traitCollection: UITraitCollection) {

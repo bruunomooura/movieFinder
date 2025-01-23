@@ -74,9 +74,16 @@ extension MovieDetailsVC {
     /// Initializes and configures the TableView DataSource and connects it to the screen.
     private func setupTableView() {
         tableViewDataSource = MoviesDetailsTableViewDataSource()
-//        tableViewDataSource?.delegate = self
+        tableViewDataSource?.delegateMovieHeader = self
         guard let dataSource = tableViewDataSource else { return }
-        screen?.setupTableView(dataSource)
+        let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
+        screen?.setupTableView(dataSourceAndDelegate: dataSource, contentInsetTop: navigationBarHeight)
+    }
+}
+
+extension MovieDetailsVC: MovieHeaderTableViewCellDelegate {
+    func didSelectedLikeButton(_ sender: UIButton) {
+        screen?.reloadTableView()
     }
 }
 

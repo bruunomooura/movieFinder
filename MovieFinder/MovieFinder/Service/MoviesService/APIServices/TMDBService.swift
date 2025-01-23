@@ -19,6 +19,7 @@ class TMDBService {
     func performRequest<T: Decodable>(url: URL) async throws -> T {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
+        request.cachePolicy = .reloadIgnoringLocalCacheData
         request.timeoutInterval = 10
         request.allHTTPHeaderFields = [
             "accept": "application/json",
@@ -31,8 +32,9 @@ class TMDBService {
         
         do {
             return try decoderService.decode(T.self, from: data)
-        } catch let decodingError {
-            throw decodingError
+            
+        } catch {
+            throw error
         }
     }
 }

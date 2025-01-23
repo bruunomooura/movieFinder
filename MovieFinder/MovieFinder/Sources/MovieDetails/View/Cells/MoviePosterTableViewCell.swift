@@ -7,11 +7,16 @@
 
 import UIKit
 
+//protocol MoviePosterTableViewCellDelegate: AnyObject {
+//    func didDisplayMoviePoster(cell: MoviePosterTableViewCell)
+//}
+
 final class MoviePosterTableViewCell: UITableViewCell {
 
+//    private weak var delegate: MoviePosterTableViewCellDelegate?
     static let identifier: String = String(describing: MoviePosterTableViewCell.self)
     
-    private lazy var movieImageView: UIImageView = {
+    private lazy var moviePosterImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleToFill
@@ -50,6 +55,10 @@ final class MoviePosterTableViewCell: UITableViewCell {
 
 // MARK: - Functions
 extension MoviePosterTableViewCell {
+//    public func delegate(delegate: MoviePosterTableViewCellDelegate?) {
+//        self.delegate = delegate
+//    }
+    
     // MARK: Configure Cell
     /**
      Configures the cell with flight information.
@@ -57,21 +66,28 @@ extension MoviePosterTableViewCell {
      - Parameter movie: The Movie object containing the movie data to populate the cell.
      */
     public func configureCell(movie: Movie) {
-        movieImageView.loadImageFromURL(movie.imageURL)
+        moviePosterImageView.loadImageFromURL(movie.imageURL(size: .w780, pathImage: .backdropPath))
     }
+    
+    func animateMoviePosterImageView() {
+          UIView.animate(withDuration: 1, delay: 0, options: .curveEaseOut, animations: {
+              self.moviePosterImageView.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+              self.moviePosterImageView.transform = .identity
+          }, completion: nil)
+      }
 }
 
 extension MoviePosterTableViewCell: ViewCode {
     func addSubviews() {
-        addSubview(movieImageView)
+        addSubview(moviePosterImageView)
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            movieImageView.topAnchor.constraint(equalTo: topAnchor),
-            movieImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            movieImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            movieImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            moviePosterImageView.topAnchor.constraint(equalTo: topAnchor),
+            moviePosterImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            moviePosterImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            moviePosterImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
     }
     
