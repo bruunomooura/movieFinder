@@ -13,8 +13,9 @@
 "useful.tryAgain" = "Tentar Novamente";
 
 // MARK: - Home
+"home.appName" = "Movie Finder";
 "home.description" = "Aqui você acompanha os filmes que estão bombando nos cinemas!";
-"home.button.title" = "Quero começar!";
+"home.button.title" = "Vamos lá!";
 
 // MARK: - MovieDetails
 "movieDetails.searchBar.placeholder" = "Buscar filme por titulo";
@@ -24,3 +25,5 @@
 "movieDetails.movieTitle.accessibilityLabel" = "Titulo do filme";
 "movieDetails.movieReleaseLabel.accessibilityLabel" = "Ano de lançamento";
 "movieDetails.movieGenresLabel.accessibilityLabel" = "Gênero";
+"movieDetails.likeCount" = "%@ Likes";
+"movieDetails.popularity" = "%@ Views";

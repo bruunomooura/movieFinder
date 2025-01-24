@@ -12,7 +12,11 @@ final class CustomAlert {
     
     /// Inicializa o CustomAlert com a view pai onde o alerta será exibido.
     init(parentView: UIView) {
-        self.parentView = parentView
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            fatalError("Nenhuma UIWindow foi encontrada.")
+        }
+        self.parentView = window
     }
     
     /// Exibe um alerta customizado com título e mensagem.
@@ -21,21 +25,25 @@ final class CustomAlert {
     ///   - message: A mensagem do alerta.
     ///   - duration: O tempo em segundos para o alerta desaparecer automaticamente.
     func showAlert(title: String, message: String, duration: TimeInterval = 3.0) {
+        if parentView.subviews.contains(where: { $0.tag == 999 }) {
+            return
+        }
         let alertView = createAlertView(title: title, message: message)
+        alertView.tag = 999
         parentView.addSubview(alertView)
         
         // Posiciona a view fora da tela para iniciar a animação
         alertView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            alertView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor, constant: 16),
-            alertView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor, constant: -16),
-            alertView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: -100),
-            alertView.heightAnchor.constraint(equalToConstant: 100)
+            alertView.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            alertView.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            alertView.topAnchor.constraint(equalTo: parentView.topAnchor),
+            alertView.heightAnchor.constraint(greaterThanOrEqualToConstant: 150)
         ])
         
         // Animação de entrada
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            alertView.transform = CGAffineTransform(translationX: 0, y: 150)
+        UIView.animate(withDuration: 0.5, delay: 0.5, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            alertView.transform = CGAffineTransform(translationX: 0, y: alertView.frame.height)
         }) { _ in
             // Remoção após o tempo definido
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
@@ -84,7 +92,7 @@ final class CustomAlert {
     /// Remove o alerta da view com animação.
     private func hideAlert(_ alertView: UIView) {
         UIView.animate(withDuration: 0.3, animations: {
-            alertView.transform = CGAffineTransform(translationX: 0, y: -150)
+            alertView.transform = CGAffineTransform(translationX: 0, y: -alertView.frame.height)
         }) { _ in
             alertView.removeFromSuperview()
         }

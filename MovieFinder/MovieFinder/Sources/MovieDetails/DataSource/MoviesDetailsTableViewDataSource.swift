@@ -9,17 +9,23 @@ import UIKit
 
 final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
     
-//    weak var delegateMoviePoster: MoviePosterTableViewCellDelegate?
     weak var delegateMovieHeader: MovieHeaderTableViewCellDelegate?
     private var genresDictionary: [Int: String] = [:]
     private var movieDetails: Movie?
     private var similarMovies: [Movie] = []
-//    var didScrollNearEnd: (() -> Void)?
     
+    /// Sets up the initial data for the movie details.
+    ///
+    /// - Parameter movieDetails: An optional `Movie` object containing the movie details.
     func setupInitialData(movieDetails: Movie?) {
         self.movieDetails = movieDetails
     }
     
+    /// Sets up the secondary data for genres and similar movies.
+    ///
+    /// - Parameters:
+    ///   - genresDictionary: A dictionary mapping genre IDs to their corresponding names.
+    ///   - similarMovies: An array of `Movie` objects representing similar movies.
     func setupSecondaryData(genresDictionary: [Int: String],
                             similarMovies: [Movie]) {
         self.genresDictionary = genresDictionary
@@ -35,9 +41,7 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MoviePosterTableViewCell.identifier, for: indexPath) as? MoviePosterTableViewCell else { return UITableViewCell() }
             
-            // Configure a célula da capa usando o objeto `movie` correspondente
             guard let movieDetails = movieDetails else { return UITableViewCell()}
-//            cell.delegate(delegate: delegateMoviePoster)
             cell.configureCell(movie: movieDetails)
             cell.animateMoviePosterImageView()
             
@@ -45,7 +49,6 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MovieHeaderTableViewCell.identifier, for: indexPath) as? MovieHeaderTableViewCell else { return UITableViewCell() }
             
-            // Configure a célula do cabeçalho usando o mesmo objeto `movie`
             guard let movieDetails = movieDetails else { return UITableViewCell()}
             cell.delegate(delegate: delegateMovieHeader)
             cell.configureCell(movie: movieDetails)
@@ -54,11 +57,8 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: SimilarMovieTableViewCell.identifier, for: indexPath) as? SimilarMovieTableViewCell else { return UITableViewCell() }
             
-            // Calcula o índice correto para a lista de filmes similares
             let similarIndex = indexPath.row - 2
             let similarMovie = similarMovies[similarIndex]
-            
-            // Configure a célula com o filme similar
             cell.configureCell(movie: similarMovie, genres: genresDictionary)
             return cell
         }
@@ -71,7 +71,7 @@ extension MoviesDetailsTableViewDataSource: UITableViewDelegate {
         case 0:
             return 440
         case 1:
-            return 80
+            return 100
         default:
             return 130
         }

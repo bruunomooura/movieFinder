@@ -8,9 +8,9 @@
 import UIKit
 
 class SimilarMovieTableViewCell: UITableViewCell {
-
+    
     static let identifier: String = String(describing: SimilarMovieTableViewCell.self)
-  
+    
     private lazy var moviePosterImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -25,6 +25,8 @@ class SimilarMovieTableViewCell: UITableViewCell {
         label.lineBreakMode = .byWordWrapping
         label.textColor = .white
         label.numberOfLines = 0
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .none
         label.accessibilityLabel = "movieDetails.movieTitle.accessibilityLabel".localized
         return label
     }()
@@ -34,6 +36,8 @@ class SimilarMovieTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14)
         label.textColor = .white
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .none
         label.accessibilityLabel = "movieDetails.movieReleaseLabel.accessibilityLabel".localized
         return label
     }()
@@ -43,6 +47,8 @@ class SimilarMovieTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14)
         label.textColor = .white
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .none
         label.accessibilityLabel = "movieDetails.movieGenresLabel.accessibilityLabel".localized
         return label
     }()
@@ -96,10 +102,10 @@ class SimilarMovieTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
 }
@@ -119,11 +125,17 @@ extension SimilarMovieTableViewCell {
         moviePosterImageView.loadImageFromURL(movie.imageURL())
         movieTitleLabel.text = movie.title
         movieReleaseLabel.text = movie.releaseYear
-        movieGenresLabel.text = movie.genreNames(using: genres)
+        let genresMovie = movie.genreNames(using: genres)
+        movieGenresLabel.text = genresMovie
+        
+        movieTitleLabel.accessibilityHint = movie.title
+        movieReleaseLabel.accessibilityHint = movie.releaseYear
+        movieGenresLabel.accessibilityHint = genresMovie
     }
 }
 
 extension SimilarMovieTableViewCell: ViewCode {
+    // MARK: Adding Subviews
     func addSubviews() {
         addSubview(moviePosterImageView)
         addSubview(verticalStackView)
@@ -131,36 +143,23 @@ extension SimilarMovieTableViewCell: ViewCode {
         verticalStackView.addArrangedSubview(horizontalStackView)
         horizontalStackView.addArrangedSubview(movieReleaseLabel)
         horizontalStackView.addArrangedSubview(movieGenresLabel)
-//        addSubview(movieTitleLabel)
-//        addSubview(movieReleaseLabel)
-//        addSubview(movieGenresLabel)
     }
     
+    // MARK: Setting Up Constraints
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            moviePosterImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
+            moviePosterImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             moviePosterImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
-            moviePosterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+            moviePosterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
             moviePosterImageView.widthAnchor.constraint(equalToConstant: 65),
             
             verticalStackView.centerYAnchor.constraint(equalTo: moviePosterImageView.centerYAnchor),
-//            verticalStackView.topAnchor.constraint(equalTo: moviePosterImageView.topAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: moviePosterImageView.trailingAnchor, constant: 20),
             verticalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-//            verticalStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            verticalStackView.bottomAnchor.constraint(equalTo: moviePosterImageView.bottomAnchor),
-//            movieTitleLabel.bottomAnchor.constraint(equalTo: moviePosterImageView.centerYAnchor, constant: -20),
-//            movieTitleLabel.leadingAnchor.constraint(equalTo: moviePosterImageView.trailingAnchor, constant: 16),
-//            movieTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            
-//            movieReleaseLabel.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor, constant: 8),
-//            movieReleaseLabel.leadingAnchor.constraint(equalTo: movieTitleLabel.leadingAnchor),
-//            
-//            movieGenresLabel.topAnchor.constraint(equalTo: movieReleaseLabel.topAnchor),
-//            movieGenresLabel.leadingAnchor.constraint(equalTo: movieReleaseLabel.trailingAnchor, constant: 8)
         ])
     }
     
+    // MARK: Styling the Cell
     func setupStyle() {
         backgroundColor = .black
     }

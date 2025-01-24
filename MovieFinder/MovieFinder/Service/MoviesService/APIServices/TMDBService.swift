@@ -16,6 +16,11 @@ class TMDBService {
         self.decoderService = decoderService
     }
     
+    /// Performs an asynchronous network request and decodes the response into a specified type.
+    ///
+    /// - Parameter url: The URL to which the request is sent.
+    /// - Returns: A decoded object of type `T`, where `T` conforms to `Decodable`.
+    /// - Throws: An error of type `MoviesLoadingError` if the request fails, or an error if decoding fails.
     func performRequest<T: Decodable>(url: URL) async throws -> T {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -32,7 +37,6 @@ class TMDBService {
         
         do {
             return try decoderService.decode(T.self, from: data)
-            
         } catch {
             throw error
         }

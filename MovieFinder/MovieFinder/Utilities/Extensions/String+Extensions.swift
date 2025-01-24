@@ -24,20 +24,17 @@ extension String {
     }
     
     // MARK: - Format With Line Breaks
-    /**
-     Formats the string by inserting line breaks after a specified number of words.
-     
-     - Parameter wordCount: The number of words after which a line break (`\n`) is inserted.
-     - Returns: A new string with line breaks added after the specified number of words.
-     */
+    /// Formats the string by inserting line breaks after a specified number of words.
+    ///
+    /// - Parameter wordCount: The number of words after which a line break (`\n`) is inserted.
+    /// - Returns: A new string with line breaks added after the specified number of words.
     public func formatWithLineBreaks(every wordCount: Int) -> String {
         let words = self.split(separator: " ")
         var formattedText: String = .init()
         
         for (index, word) in words.enumerated() {
             formattedText += word
-            if (index + 1) % wordCount == 0
-                && index != words.count - 1 {
+            if (index + 1) % wordCount == 0 && index != words.count - 1 {
                 formattedText += "\n"
             } else if index != words.count - 1 {
                 formattedText += " "

@@ -31,7 +31,7 @@ class MovieDetailsScreen: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.textColor = .background
-        label.isHidden = false
+        label.isHidden = true
         label.accessibilityLabel = "movieDetails.noResultsLabel.accessibilityLabel".localized
         return label
     }()
@@ -54,51 +54,27 @@ class MovieDetailsScreen: UIView {
 // MARK: - Functions
 extension MovieDetailsScreen {
     // MARK: Setup Table View
-    /**
-     Configures the table view with a data source and delegate.
-     
-     - Parameter dataSourceAndDelegate: The data source and delegate for the table view.
-     */
+    /// Configures the table view with a data source and delegate.
+    ///
+    /// - Parameters:
+    ///   - dataSourceAndDelegate: The data source and delegate for the table view.
+    ///   - contentInsetTop: The top content inset for the table view.
     public func setupTableView(dataSourceAndDelegate: MoviesDetailsTableViewDataSource, contentInsetTop: CGFloat) {
         tableView.delegate = dataSourceAndDelegate
         tableView.dataSource = dataSourceAndDelegate
-//        tableView.contentInset = UIEdgeInsets(top: -contentInsetTop, left: 0, bottom: 0, right: 0)
         tableView.scrollIndicatorInsets.top = -(contentInsetTop * 2)
-//        tableView.verticalScrollIndicatorInsets.top = -(contentInsetTop * 2)
-//        tableView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: topAnchor).isActive = true
         tableView.contentInsetAdjustmentBehavior = .never
-//        tableView.reloadData()
-//        tableView.insetsContentViewsToSafeArea = false
-
     }
-        
-//    public func updateConstraints(for traitCollection: UITraitCollection) {
-//        if traitCollection.verticalSizeClass == .regular {
-//            // Portrait
-//            NSLayoutConstraint.deactivate(landscapeConstraints)
-//            NSLayoutConstraint.activate(portraitConstraints)
-//#if DEBUG
-//            print("modo retrato")
-//#endif
-//        } else {
-//            // Landscape
-//            NSLayoutConstraint.deactivate(portraitConstraints)
-//            NSLayoutConstraint.activate(landscapeConstraints)
-//#if DEBUG
-//            print("modo paisagem")
-//#endif
-//        }
-//    }
     
     // MARK: Reload Table View
-    /**
-     Reloads the table view data.
-     */
+    /// Reloads the table view data.
     public func reloadTableView() {
         tableView.reloadData()
     }
     
-    
+    /// Inserts rows into the table view at the specified index paths.
+    ///
+    /// - Parameter indexPaths: An array of index paths indicating where to insert rows.
     public func insertRowsTableView(indexPaths: [IndexPath]) {
         tableView.performBatchUpdates {
             tableView.insertRows(at: indexPaths, with: .middle)
@@ -106,35 +82,28 @@ extension MovieDetailsScreen {
     }
     
     // MARK: No Results
-    /**
-     Displays or hides the no results label and table view based on whether there are movies results.
-     
-     - Parameter noResults: A boolean indicating if there are no results.
-     */
+    /// Displays or hides the no results label and table view based on whether there are movie results.
+    ///
+    /// - Parameter noResults: A boolean indicating if there are no results.
     public func noResults(noResults: Bool) {
         tableView.isHidden = noResults
         noResultsLabel.isHidden = !noResults
     }
 }
 
+// MARK: - ViewCode Protocol Conformance
 extension MovieDetailsScreen: ViewCode {
+    
     // MARK: Add Subviews
-    /**
-     Adds the subviews to the main view.
-     */
+    /// Adds the subviews to the main view.
     func addSubviews() {
         addSubview(tableView)
         addSubview(noResultsLabel)
     }
     
     // MARK: Setup Constraints
-    /**
-     Configures the layout constraints for the subviews.
-     */
+    /// Configures the layout constraints for the subviews.
     func setupConstraints() {
-    
-        // Portrait Constraints
-//        portraitConstraints = [
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: topAnchor),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -145,28 +114,11 @@ extension MovieDetailsScreen: ViewCode {
             noResultsLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             noResultsLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             noResultsLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-            ])
-//        ]
-        
-//        // Landscape Constraints
-//        landscapeConstraints = [
-//           
-//            tableView.topAnchor.constraint(equalTo: topAnchor),
-//            tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            tableView.bottomAnchor.constraint(equalTo: bottomAnchor),
-//            
-//            noResultsLabel.topAnchor.constraint(equalTo: topAnchor),
-//            noResultsLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-//            noResultsLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-//            noResultsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
-//        ]
+        ])
     }
     
     // MARK: Extra Configuration
-    /**
-     Additional configurations for the view.
-     */
+    /// Additional configurations for the view.
     func setupStyle() {
         backgroundColor = .clear
         tableView.backgroundColor = .black

@@ -49,21 +49,6 @@ class MovieHeaderTableViewCell: UITableViewCell {
         return button
     }()
     
-    @objc
-    private func tappedLikeButton(_ sender: UIButton) {
-        print("Like button \(likedMovie)")
-        likeButton.transform = CGAffineTransform.identity
-       
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            guard let self = self else { return }
-            likedMovie.toggle()
-            self.delegate?.didSelectedLikeButton(sender)
-            
-            setLikeButtonImage()
-            likeButton.animateImageBounce()
-        }
-    }
-    
     private lazy var horizontalStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,32 +87,50 @@ class MovieHeaderTableViewCell: UITableViewCell {
 
 // MARK: - Functions
 extension MovieHeaderTableViewCell {
+    // MARK: Delegate
+    /// Sets the delegate for the MovieHeaderTableViewCell.
+    ///
+    /// - Parameter delegate: The delegate object conforming to the `MovieHeaderTableViewCellDelegate` protocol.
     public func delegate(delegate: MovieHeaderTableViewCellDelegate?) {
         self.delegate = delegate
     }
     
     // MARK: Configure Cell
-    /**
-     Configures the cell with flight information.
-     
-     - Parameter movie: The Movie object containing the movie data to populate the cell.
-     */
+    /// Configures the cell with the provided movie data.
+    ///
+    /// - Parameter movie: An instance of `Movie` containing the data to populate the cell.
     public func configureCell(movie: Movie) {
         movieTitleLabel.text = movie.title
+        movieTitleLabel.accessibilityHint = movie.title
         setupStatsViews(likesValue: movie.voteCount.formatAsAbbreviated(),
-                            popularityValue: Int(movie.popularity).formatAsAbbreviated())
-        setLikeButtonImage()
+                        popularityValue: Int(movie.popularity).formatAsAbbreviated())
+        updateLikeButtonImage()
+    }
+    
+    // MARK: Private Methods
+    @objc
+    private func tappedLikeButton(_ sender: UIButton) {
+        likeButton.transform = CGAffineTransform.identity
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            guard let self = self else { return }
+            likedMovie.toggle()
+            self.delegate?.didSelectedLikeButton(sender)
+            
+            updateLikeButtonImage()
+            likeButton.animateImageBounce()
+        }
     }
     
     private func setupStatsViews(likesValue: String, popularityValue: String) {
-        let iconOne = UIImage(systemName: SystemImage.heartFill.rawValue)
-        likeCount.setupComponent(icon: iconOne, title: "\(likesValue) Curtidas")
+        let heartIcon = UIImage(systemName: SystemImage.heartFill.rawValue)
+        likeCount.setupComponent(icon: heartIcon, title: String(format: "movieDetails.likeCount".localized, likesValue))
         
-        let iconTwo = UIImage(systemName: SystemImage.starFill.rawValue)
-        popularityCount.setupComponent(icon: iconTwo, title: "\(popularityValue) Visualizações")
+        let starIcon = UIImage(systemName: SystemImage.starFill.rawValue)
+        popularityCount.setupComponent(icon: starIcon, title: String(format: "movieDetails.popularity".localized, popularityValue))
     }
     
-    private func setLikeButtonImage() {
+    private func updateLikeButtonImage() {
         let iconImage = UIImage(systemName: likedMovie == true
                                 ? SystemImage.heartFill.rawValue
                                 : SystemImage.heart.rawValue)?
@@ -136,7 +139,10 @@ extension MovieHeaderTableViewCell {
     }
 }
 
+// MARK: - ViewCode Protocol Conformance
 extension MovieHeaderTableViewCell: ViewCode {
+    
+    // MARK: Adding Subviews
     func addSubviews() {
         addSubview(movieTitleLabel)
         addSubview(horizontalStackView)
@@ -145,9 +151,10 @@ extension MovieHeaderTableViewCell: ViewCode {
         contentView.addSubview(likeButton)
     }
     
+    // MARK: Setting Up Constraints
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            movieTitleLabel.topAnchor.constraint(equalTo: topAnchor),
+            movieTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             
             likeButton.topAnchor.constraint(equalTo: movieTitleLabel.topAnchor),
@@ -162,8 +169,9 @@ extension MovieHeaderTableViewCell: ViewCode {
         ])
     }
     
+    // MARK: Styling the Cell
     func setupStyle() {
         backgroundColor = .clear
-           isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
     }
 }

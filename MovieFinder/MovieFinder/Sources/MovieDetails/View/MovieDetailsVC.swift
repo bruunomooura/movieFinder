@@ -13,7 +13,7 @@ class MovieDetailsVC: UIViewController {
     var screen: MovieDetailsScreen?
     var customAlert: CustomAlert?
     private var tableViewDataSource: MoviesDetailsTableViewDataSource?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
@@ -38,10 +38,9 @@ class MovieDetailsVC: UIViewController {
 
 // MARK: - Functions for initial setup
 extension MovieDetailsVC {
+    
     // MARK: - Navigation Bar Setup
-    /**
-     Configures the navigation bar appearance and title.
-     */
+    /// Configures the navigation bar appearance and title.
     private func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
         let config = UIImage.SymbolConfiguration(paletteColors: [.white, .black.withAlphaComponent(0.45)])
@@ -52,12 +51,10 @@ extension MovieDetailsVC {
         appearance.backgroundColor = .clear
         appearance.shadowColor = .clear
         navigationController?.navigationBar.standardAppearance = appearance
-//        navigationController?.navigationBar.scrollEdgeAppearance = appearance
         navigationController?.navigationBar.compactAppearance = appearance
-        
         navigationItem.backButtonDisplayMode = .minimal
+        navigationItem.accessibilityTraits = .none
     }
-    
     
     // MARK: - ViewModel Configuration
     /// Configures the ViewModel by setting the delegate and initiating the data loading process.
@@ -67,7 +64,7 @@ extension MovieDetailsVC {
     }
     
     // MARK: - Data Loading
-    /// Async loads movie data.
+    /// Asynchronously loads primary movie data.
     private func loadDataPrimary() {
         Task {
             await viewModel.loadMovieDetails()
@@ -75,7 +72,7 @@ extension MovieDetailsVC {
     }
     
     // MARK: - Data Loading
-    /// Async loads movie data.
+    /// Asynchronously loads secondary movie data, including genres and similar movies.
     private func loadDataSecondary() {
         Task {
             await viewModel.loadGenresAndSimilarMovies()
@@ -93,39 +90,49 @@ extension MovieDetailsVC {
     }
 }
 
+// MARK: - MovieHeaderTableViewCellDelegate
 extension MovieDetailsVC: MovieHeaderTableViewCellDelegate {
+    /// Called when the like button is selected.
+    ///
+    /// - Parameter sender: The UIButton that triggered the event.
     func didSelectedLikeButton(_ sender: UIButton) {
         screen?.reloadTableView()
     }
 }
 
+// MARK: - MovieDetailsViewModelDelegate
 extension MovieDetailsVC: MovieDetailsViewModelDelegate {
+    /// Called when movie details are successfully loaded.
+    ///
+    /// - Parameter movieDetails: The Movie object containing the loaded details.
     func loadMovieDetailsSuccess(movieDetails: Movie?) {
         tableViewDataSource?.setupInitialData(movieDetails: movieDetails)
         screen?.noResults(noResults: false)
         screen?.reloadTableView()
     }
     
-    func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int : String], similarMovies: [Movie], _ indexPath: [IndexPath] ) {
+    /// Called when genres and similar movies are successfully loaded.
+    ///
+    /// - Parameters:
+    ///   - genresDictionary: A dictionary of genre IDs and their corresponding names.
+    ///   - similarMovies: An array of similar movies.
+    ///   - indexPath: The index paths of the rows to be inserted.
+    func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int : String], similarMovies: [Movie], _ indexPath: [IndexPath]) {
         tableViewDataSource?.setupSecondaryData(genresDictionary: genresDictionary,
-                                             similarMovies: similarMovies)
+                                                similarMovies: similarMovies)
         screen?.noResults(noResults: false)
         screen?.insertRowsTableView(indexPaths: indexPath)
     }
     
+    /// Called when there is an error loading data.
+    ///
+    /// - Parameter message: The error message to be displayed.
     func errorLoadingData(message: String) {
         screen?.noResults(noResults: true)
-//        if customAlert == nil {
+        if customAlert == nil {
             customAlert = CustomAlert(parentView: self.view)
-//        }
+        }
         
-        customAlert?.showAlert(title: "Erro de conexão", message: "Cheque sua conexão com a internet. themoviedb.org também pode estar indisponível")
+        customAlert?.showAlert(title: "Connection Error", message: "Check your internet connection. themoviedb.org may also be unavailable.")
     }
-//    func updateData(content: [Movie]) {
-//        <#code#>
-//    }
-    
-    
-    
 }
-
