@@ -16,7 +16,8 @@ class MovieHeaderTableViewCell: UITableViewCell {
     private weak var delegate: MovieHeaderTableViewCellDelegate?
     
     static let identifier: String = String(describing: MovieHeaderTableViewCell.self)
-    
+    private let likeCount: StatsView = StatsView()
+    private let popularityCount: StatsView = StatsView()
     private var likedMovie: Bool = .init()
     private var portraitConstraints: [NSLayoutConstraint] = []
     private var landscapeConstraints: [NSLayoutConstraint] = []
@@ -24,13 +25,11 @@ class MovieHeaderTableViewCell: UITableViewCell {
     private lazy var movieTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 20, weight: .bold)
+        label.font = .systemFont(ofSize: 30, weight: .black)
         label.textAlignment = .left
         label.lineBreakMode = .byWordWrapping
-        label.contentMode = .top
         label.numberOfLines = 0
         label.textColor = .white
-        label.backgroundColor = .clear
         label.isAccessibilityElement = true
         label.accessibilityLabel = "movieDetails.movieTitle.accessibilityLabel".localized
         label.accessibilityTraits = .none
@@ -42,27 +41,26 @@ class MovieHeaderTableViewCell: UITableViewCell {
         button.translatesAutoresizingMaskIntoConstraints = false
         
         var configurationButton = UIButton.Configuration.filled()
-        configurationButton.preferredSymbolConfigurationForImage = UIImage.SymbolConfiguration(pointSize: 25, weight: .light)
-        //        configurationButton.imagePadding = 8
-        //        configurationButton.imagePlacement = .all
-        //        configurationButton.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
+        configurationButton.contentInsets = .init(top: 15, leading: 15, bottom: 15, trailing: 15)
         configurationButton.baseBackgroundColor = .clear
         
         button.configuration = configurationButton
-        button.addTarget(self, action: #selector(tappedLikeButton), for: .touchDown)
+        button.addTarget(self, action: #selector(tappedLikeButton), for: .touchUpInside)
         return button
     }()
     
     @objc
     private func tappedLikeButton(_ sender: UIButton) {
-        print("Like button tocado")
-        sender.animateImageBounce()
+        print("Like button \(likedMovie)")
+        likeButton.transform = CGAffineTransform.identity
+       
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             likedMovie.toggle()
             self.delegate?.didSelectedLikeButton(sender)
             
             setLikeButtonImage()
+            likeButton.animateImageBounce()
         }
     }
     
@@ -70,15 +68,10 @@ class MovieHeaderTableViewCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
-        stackView.spacing = 10
+        stackView.spacing = 25
         stackView.isLayoutMarginsRelativeArrangement = false
-        //        stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0,
-        //                                                                     leading: 10,
-        //                                                                     bottom: 0,
-        //                                                                     trailing: 10)
-        //        stackView.backgroundColor = .purple
-                stackView.alignment = .leading
-        //        stackView.distribution = .fill
+        stackView.alignment = .leading
+        stackView.distribution = .equalSpacing
         return stackView
     }()
     
@@ -121,20 +114,17 @@ extension MovieHeaderTableViewCell {
      */
     public func configureCell(movie: Movie) {
         movieTitleLabel.text = movie.title
-        setupInfoMovieViews(likesValue: movie.voteCount.formatAsAbbreviated(),
+        setupStatsViews(likesValue: movie.voteCount.formatAsAbbreviated(),
                             popularityValue: Int(movie.popularity).formatAsAbbreviated())
         setLikeButtonImage()
     }
     
-    private func setupInfoMovieViews(likesValue: String, popularityValue: String) {
-        guard let iconOne = UIImage(systemName: SystemImage.heartFill.rawValue) else { return }
-        let likeCount: infoMovieView = infoMovieView(icon: iconOne, title: "\(likesValue) Curtidas")
+    private func setupStatsViews(likesValue: String, popularityValue: String) {
+        let iconOne = UIImage(systemName: SystemImage.heartFill.rawValue)
+        likeCount.setupComponent(icon: iconOne, title: "\(likesValue) Curtidas")
         
-        guard let iconTwo = UIImage(systemName: SystemImage.heartFill.rawValue) else { return }
-        let popularityCount: infoMovieView = infoMovieView(icon: iconTwo, title: "\(popularityValue) Visualizações")
-        
-        horizontalStackView.addArrangedSubview(likeCount)
-        horizontalStackView.addArrangedSubview(popularityCount)
+        let iconTwo = UIImage(systemName: SystemImage.starFill.rawValue)
+        popularityCount.setupComponent(icon: iconTwo, title: "\(popularityValue) Visualizações")
     }
     
     private func setLikeButtonImage() {
@@ -144,40 +134,36 @@ extension MovieHeaderTableViewCell {
             .withTintColor(.buttonBackground, renderingMode: .alwaysOriginal)
         likeButton.setImage(iconImage, for: .normal)
     }
-    
 }
 
 extension MovieHeaderTableViewCell: ViewCode {
     func addSubviews() {
         addSubview(movieTitleLabel)
         addSubview(horizontalStackView)
-        
+        horizontalStackView.addArrangedSubview(likeCount)
+        horizontalStackView.addArrangedSubview(popularityCount)
         contentView.addSubview(likeButton)
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            movieTitleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
-            movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            movieTitleLabel.widthAnchor.constraint(equalToConstant: 300),
-            movieTitleLabel.heightAnchor.constraint(equalToConstant: 60),
+            movieTitleLabel.topAnchor.constraint(equalTo: topAnchor),
+            movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
             
             likeButton.topAnchor.constraint(equalTo: movieTitleLabel.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            likeButton.widthAnchor.constraint(equalToConstant: 25),
-            likeButton.heightAnchor.constraint(equalToConstant: 25),
+            likeButton.leadingAnchor.constraint(equalTo: movieTitleLabel.trailingAnchor, constant: 20),
+            likeButton.widthAnchor.constraint(equalToConstant: 30),
+            likeButton.heightAnchor.constraint(equalToConstant: 30),
             
-            horizontalStackView.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor, constant: 20),
-            horizontalStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            horizontalStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
-            
-            
+            horizontalStackView.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor, constant: 15),
+            horizontalStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
+            horizontalStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10),
         ])
     }
     
     func setupStyle() {
         backgroundColor = .clear
+           isUserInteractionEnabled = true
     }
 }
-

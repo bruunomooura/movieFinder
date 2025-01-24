@@ -21,7 +21,8 @@ class SimilarMovieTableViewCell: UITableViewCell {
     private lazy var movieTitleLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 16, weight: .bold)
+        label.font = .systemFont(ofSize: 16)
+        label.lineBreakMode = .byWordWrapping
         label.textColor = .white
         label.numberOfLines = 0
         label.accessibilityLabel = "movieDetails.movieTitle.accessibilityLabel".localized
@@ -31,7 +32,7 @@ class SimilarMovieTableViewCell: UITableViewCell {
     private lazy var movieReleaseLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 14)
         label.textColor = .white
         label.accessibilityLabel = "movieDetails.movieReleaseLabel.accessibilityLabel".localized
         return label
@@ -40,7 +41,7 @@ class SimilarMovieTableViewCell: UITableViewCell {
     private lazy var movieGenresLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 16)
+        label.font = .systemFont(ofSize: 14)
         label.textColor = .white
         label.accessibilityLabel = "movieDetails.movieGenresLabel.accessibilityLabel".localized
         return label
@@ -116,7 +117,7 @@ extension SimilarMovieTableViewCell {
     ///
     public func configureCell(movie: Movie, genres: [Int: String]) {
         moviePosterImageView.loadImageFromURL(movie.imageURL())
-        movieTitleLabel.text = movie.title.formatWithLineBreaks(every: 4)
+        movieTitleLabel.text = movie.title
         movieReleaseLabel.text = movie.releaseYear
         movieGenresLabel.text = movie.genreNames(using: genres)
     }
@@ -138,13 +139,14 @@ extension SimilarMovieTableViewCell: ViewCode {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             moviePosterImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            moviePosterImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            moviePosterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            moviePosterImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 15),
+            moviePosterImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
             moviePosterImageView.widthAnchor.constraint(equalToConstant: 65),
             
             verticalStackView.centerYAnchor.constraint(equalTo: moviePosterImageView.centerYAnchor),
 //            verticalStackView.topAnchor.constraint(equalTo: moviePosterImageView.topAnchor),
             verticalStackView.leadingAnchor.constraint(equalTo: moviePosterImageView.trailingAnchor, constant: 20),
+            verticalStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
 //            verticalStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
 //            verticalStackView.bottomAnchor.constraint(equalTo: moviePosterImageView.bottomAnchor),
 //            movieTitleLabel.bottomAnchor.constraint(equalTo: moviePosterImageView.centerYAnchor, constant: -20),

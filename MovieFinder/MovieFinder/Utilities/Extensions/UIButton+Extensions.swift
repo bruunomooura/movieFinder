@@ -57,6 +57,8 @@ extension UIButton {
     public func animateImageBounce() {
         guard let imageView = self.imageView else { return }
         
+        imageView.transform = CGAffineTransform.identity
+        
         UIView.animate(withDuration: 0.2,
                        animations: {
             imageView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)

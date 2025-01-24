@@ -11,4 +11,5 @@ enum SystemImage: String, CaseIterable {
     case heart = "heart"
     case heartFill = "heart.fill"
     case chevronLeftCircleFill = "chevron.left.circle.fill"
+    case starFill = "star.fill"
 }

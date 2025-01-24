@@ -15,9 +15,8 @@ class MovieDetailsScreen: UIView {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = .clear
-        tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.isHidden = true
         tableView.register(MoviePosterTableViewCell.self, forCellReuseIdentifier: MoviePosterTableViewCell.identifier)
         tableView.register(MovieHeaderTableViewCell.self, forCellReuseIdentifier: MovieHeaderTableViewCell.identifier)
         tableView.register(SimilarMovieTableViewCell.self, forCellReuseIdentifier: SimilarMovieTableViewCell.identifier)
@@ -32,7 +31,7 @@ class MovieDetailsScreen: UIView {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.textColor = .background
-        label.isHidden = true
+        label.isHidden = false
         label.accessibilityLabel = "movieDetails.noResultsLabel.accessibilityLabel".localized
         return label
     }()
@@ -99,6 +98,13 @@ extension MovieDetailsScreen {
         tableView.reloadData()
     }
     
+    
+    public func insertRowsTableView(indexPaths: [IndexPath]) {
+        tableView.performBatchUpdates {
+            tableView.insertRows(at: indexPaths, with: .middle)
+        }
+    }
+    
     // MARK: No Results
     /**
      Displays or hides the no results label and table view based on whether there are movies results.
@@ -138,7 +144,7 @@ extension MovieDetailsScreen: ViewCode {
             noResultsLabel.topAnchor.constraint(equalTo: topAnchor),
             noResultsLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             noResultsLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            noResultsLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
+            noResultsLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
             ])
 //        ]
         
@@ -163,5 +169,7 @@ extension MovieDetailsScreen: ViewCode {
      */
     func setupStyle() {
         backgroundColor = .clear
+        tableView.backgroundColor = .black
+        tableView.separatorStyle = .none
     }
 }

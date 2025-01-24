@@ -16,11 +16,13 @@ final class MoviesDetailsTableViewDataSource: NSObject, UITableViewDataSource {
     private var similarMovies: [Movie] = []
 //    var didScrollNearEnd: (() -> Void)?
     
-    func reloadTableView(genresDictionary: [Int: String],
-                         movieDetails: Movie?,
-                         similarMovies: [Movie]) {
-        self.genresDictionary = genresDictionary
+    func setupInitialData(movieDetails: Movie?) {
         self.movieDetails = movieDetails
+    }
+    
+    func setupSecondaryData(genresDictionary: [Int: String],
+                            similarMovies: [Movie]) {
+        self.genresDictionary = genresDictionary
         self.similarMovies = similarMovies
     }
     
@@ -67,9 +69,9 @@ extension MoviesDetailsTableViewDataSource: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return 250
+            return 440
         case 1:
-            return 140
+            return 80
         default:
             return 130
         }

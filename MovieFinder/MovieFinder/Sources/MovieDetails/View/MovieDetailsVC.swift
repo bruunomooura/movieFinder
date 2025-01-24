@@ -22,6 +22,10 @@ class MovieDetailsVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        loadDataSecondary()
+    }
+    
     override func loadView() {
         self.screen = MovieDetailsScreen()
         view = screen
@@ -40,7 +44,7 @@ extension MovieDetailsVC {
      */
     private func setupNavigationBar() {
         let appearance = UINavigationBarAppearance()
-        let config = UIImage.SymbolConfiguration(paletteColors: [.white, .systemGray5.withAlphaComponent(0.55)])
+        let config = UIImage.SymbolConfiguration(paletteColors: [.white, .black.withAlphaComponent(0.45)])
         let image = UIImage(systemName: SystemImage.chevronLeftCircleFill.rawValue, withConfiguration: config)
         
         appearance.setBackIndicatorImage(image, transitionMaskImage: image)
@@ -59,14 +63,22 @@ extension MovieDetailsVC {
     /// Configures the ViewModel by setting the delegate and initiating the data loading process.
     private func setupViewModel() {
         viewModel.delegate(delegate: self)
-        loadData()
+        loadDataPrimary()
     }
     
     // MARK: - Data Loading
     /// Async loads movie data.
-    private func loadData() {
+    private func loadDataPrimary() {
         Task {
-            await viewModel.loadData()
+            await viewModel.loadMovieDetails()
+        }
+    }
+    
+    // MARK: - Data Loading
+    /// Async loads movie data.
+    private func loadDataSecondary() {
+        Task {
+            await viewModel.loadGenresAndSimilarMovies()
         }
     }
     
@@ -88,6 +100,19 @@ extension MovieDetailsVC: MovieHeaderTableViewCellDelegate {
 }
 
 extension MovieDetailsVC: MovieDetailsViewModelDelegate {
+    func loadMovieDetailsSuccess(movieDetails: Movie?) {
+        tableViewDataSource?.setupInitialData(movieDetails: movieDetails)
+        screen?.noResults(noResults: false)
+        screen?.reloadTableView()
+    }
+    
+    func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int : String], similarMovies: [Movie], _ indexPath: [IndexPath] ) {
+        tableViewDataSource?.setupSecondaryData(genresDictionary: genresDictionary,
+                                             similarMovies: similarMovies)
+        screen?.noResults(noResults: false)
+        screen?.insertRowsTableView(indexPaths: indexPath)
+    }
+    
     func errorLoadingData(message: String) {
         screen?.noResults(noResults: true)
 //        if customAlert == nil {
@@ -96,15 +121,6 @@ extension MovieDetailsVC: MovieDetailsViewModelDelegate {
         
         customAlert?.showAlert(title: "Erro de conexão", message: "Cheque sua conexão com a internet. themoviedb.org também pode estar indisponível")
     }
-    
-    func loadDataCompleted(genresDictionary: [Int : String], movieDetails: Movie?, similarMovies: [Movie]) {
-        tableViewDataSource?.reloadTableView(genresDictionary: genresDictionary,
-                                             movieDetails: movieDetails,
-                                             similarMovies: similarMovies)
-        screen?.noResults(noResults: false)
-        screen?.reloadTableView()
-    }
-    
 //    func updateData(content: [Movie]) {
 //        <#code#>
 //    }

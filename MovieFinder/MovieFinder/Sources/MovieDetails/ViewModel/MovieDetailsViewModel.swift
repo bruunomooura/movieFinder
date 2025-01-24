@@ -11,7 +11,8 @@ import UIKit
 protocol MovieDetailsViewModelDelegate: AnyObject {
     //    func updateData(content: [Movie])
     func errorLoadingData(message: String)
-    func loadDataCompleted(genresDictionary: [Int: String], movieDetails: Movie?, similarMovies: [Movie])
+    func loadMovieDetailsSuccess(movieDetails: Movie?)
+    func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int: String], similarMovies: [Movie], _ indexPath: [IndexPath])
 }
 
 final class MovieDetailsViewModel {
@@ -54,35 +55,56 @@ extension MovieDetailsViewModel {
         self.delegate = delegate
     }
     
-    public func loadData() async {
+    public func loadMovieDetails() async {
+        isLoading = true
+        do {
+            async let movieDetails = movieDetailsServiceProtocol.fetchMovieDetails(
+                movieId: movieId,
+                language: language)
+            
+            let movieDetailsResult = try await movieDetails
+            
+            self.movieDetails = movieDetailsResult
+            
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                self.isLoading = false
+                self.delegate?.loadMovieDetailsSuccess(movieDetails: self.movieDetails)
+            }
+        } catch {
+            await MainActor.run { [weak self] in
+                guard let self = self else { return }
+                self.isLoading = false
+                self.delegate?.errorLoadingData(message: error.localizedDescription)
+            }
+        }
+    }
+    
+    public func loadGenresAndSimilarMovies() async {
         isLoading = true
         do {
             async let genres = genreServiceProtocol.fetchGenres(
-                language: language)
-            async let movieDetails = movieDetailsServiceProtocol.fetchMovieDetails(
-                movieId: movieId,
                 language: language)
             async let similarMovies = similarMoviesServiceProtocol.fetchRelatedMovies(
                 movieId: movieId,
                 language: language)
             
             let genresResult = try await genres
-            let movieDetailsResult = try await movieDetails
             let similarMoviesResult = try await similarMovies
             
             configGenresDictionary(with: genresResult.genres)
-            
-            self.movieDetails = movieDetailsResult
             self.similarMoviesList = similarMoviesResult.results
+            let indexPath = defineIndexPath(similarMovies: similarMoviesResult.results)
+            
             
             await MainActor.run { [weak self] in
                 guard let self = self else { return }
                 self.isLoading = false
-                self.delegate?.loadDataCompleted(
+                self.delegate?.loadGenresAndSimilarMoviesSuccess(
                     genresDictionary: self.genresDictionary,
-                    movieDetails: self.movieDetails,
-                    similarMovies: self.similarMoviesList)
+                    similarMovies: self.similarMoviesList, indexPath)
             }
+            
         } catch {
             await MainActor.run { [weak self] in
                 guard let self = self else { return }
@@ -94,5 +116,10 @@ extension MovieDetailsViewModel {
     
     private func configGenresDictionary(with genres: [Genre]) {
         genresDictionary = Dictionary(uniqueKeysWithValues: genres.map { ($0.id, $0.name) })
+    }
+    
+    private func defineIndexPath(similarMovies: [Movie]) -> [IndexPath] {
+        let newIndexPath = (0..<similarMovies.count).map { IndexPath(row: $0, section: 0) }
+        return newIndexPath
     }
 }

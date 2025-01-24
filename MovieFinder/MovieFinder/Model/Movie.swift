@@ -38,11 +38,16 @@ struct Movie: Decodable {
         backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath) ?? ""
         genreIDs = try container.decodeIfPresent([Int]?.self, forKey: .genreIDs) ?? nil
         id = try container.decodeIfPresent(Int.self, forKey: .id) ?? 0
-        popularity = try container.decodeIfPresent(Double.self, forKey: .popularity) ?? 0.0
         posterPath = try container.decodeIfPresent(String.self, forKey: .posterPath) ?? ""
         releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate) ?? ""
         title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
         voteCount = try container.decodeIfPresent(Int.self, forKey: .voteCount) ?? 0
+        
+        if let popularityValue = try? container.decode(Double.self, forKey: .popularity) {
+            popularity = popularityValue * 1000
+        } else {
+            popularity = 0.0
+        }
     }
     
     /// Generates the complete URL for the movie's image based on its type (poster or backdrop).
