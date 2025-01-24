@@ -5,3 +5,9 @@
   Created by Bruno Moura on 18/01/25.
   
 */
+
+// MARK: - Useful
+"useful.cancel" = "Cancel";
+"useful.confirm" = "Confirm";
+"useful.ok" = "Ok";
+"useful.tryAgain" = "Try Again";
