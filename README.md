@@ -47,6 +47,13 @@ Como Executar o App
 
 <img src="https://i.imgur.com/EJYWrIn.png" width="300" alt="Tela MovieDetails">
 
+
+**[Leaks]**
+
+<img src="https://i.imgur.com/SKVGzOM.png" width="900" alt="Leaks">
+
+App sem vazamentos de memória
+
 Instalação
 
 Clone o repositório:
