@@ -8,16 +8,16 @@
 import UIKit
 
 class HomeVC: UIViewController {
-
+    
     var viewModel: HomeViewModel = HomeViewModel()
     var screen: HomeScreen?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         screen?.delegate(delegate: self)
-        screen?.updateConstraints(for: traitCollection)
         viewModel.delegate(delegate: self)
         viewModel.setupTitles()
+        setupNavigationBar()
         // Do any additional setup after loading the view.
     }
     
@@ -26,19 +26,26 @@ class HomeVC: UIViewController {
         view = screen
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        screen?.updateConstraints(for: traitCollection)
-    }
-
     deinit {
         print(Self.self, "- Deallocated")
     }
 }
 
+// MARK: - HomeScreenDelegate
 extension HomeVC: HomeScreenDelegate {
+    
+    /// Configures the navigation bar appearance and title.
+    private func setupNavigationBar() {
+        navigationItem.backButtonDisplayMode = .minimal
+    }
+    
+    /// Handles the event when the welcome button is tapped.
+    ///
+    /// This method instantiates the `MovieDetailsVC` and pushes it onto the navigation stack,
+    /// allowing the user to view details about a selected movie.
     func didTapWelcomeButton() {
-        print("botão tocado")
+        let movieDetailsVC = MovieDetailsVC()
+        navigationController?.pushViewController(movieDetailsVC, animated: true)
     }
 }
 

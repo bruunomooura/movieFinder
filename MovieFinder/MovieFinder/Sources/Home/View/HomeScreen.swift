@@ -12,14 +12,11 @@ protocol HomeScreenDelegate: AnyObject {
 }
 
 class HomeScreen: UIView {
-
-    private var portraitConstraints: [NSLayoutConstraint] = []
-    private var landscapeConstraints: [NSLayoutConstraint] = []
+    
     private weak var delegate: HomeScreenDelegate?
-   
+    
     public func delegate(delegate: HomeScreenDelegate?) {
         self.delegate = delegate
-        
     }
     
     private lazy var logoImageView: UIImageView = {
@@ -28,6 +25,10 @@ class HomeScreen: UIView {
         imageView.image = UIImage.logoMovieFinder
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .clear
+        imageView.isAccessibilityElement = true
+        imageView.accessibilityTraits = .none
+        imageView.accessibilityLabel = "home.appName".localized
+
         return imageView
     }()
     
@@ -54,7 +55,6 @@ class HomeScreen: UIView {
         button.backgroundColor = .buttonBackground
         button.accessibilityTraits = .button
         button.addTarget(self, action: #selector(tappedWelcomeButton), for: .touchDown)
-        
         return button
     }()
     
@@ -85,6 +85,12 @@ class HomeScreen: UIView {
 
 // MARK: - Functions
 extension HomeScreen {
+    
+    /// Sets up the titles for the welcome label and welcome button.
+    ///
+    /// - Parameters:
+    ///   - welcomeLabelText: The text to be displayed on the welcome label.
+    ///   - welcomeButtonTitle: The title to be displayed on the welcome button.
     public func setupTitles(_ welcomeLabelText: String, _ welcomeButtonTitle: String) {
         welcomeLabel.text = welcomeLabelText
         welcomeLabel.accessibilityLabel = welcomeLabelText
@@ -93,26 +99,18 @@ extension HomeScreen {
         welcomeButton.accessibilityLabel = welcomeButtonTitle
     }
     
+    /// Handles the tap event for the welcome button.
+    ///
+    /// This method triggers an animation for the button and notifies the delegate
+    /// after a short delay, indicating that the welcome button has been tapped.
+    ///
+    /// - Parameter sender: The UIButton that was tapped.
     @objc
     private func tappedWelcomeButton(_ sender: UIButton) {
         sender.animateTap()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
             guard let self = self else { return }
             self.delegate?.didTapWelcomeButton()
-        }
-    }
-    
-    public func updateConstraints(for traitCollection: UITraitCollection) {
-        if traitCollection.verticalSizeClass == .regular {
-            print("modo retrato")
-            // Portrait
-            NSLayoutConstraint.deactivate(landscapeConstraints)
-            NSLayoutConstraint.activate(portraitConstraints)
-        } else {
-            print("modo paisagem")
-            // Landscape
-            NSLayoutConstraint.deactivate(portraitConstraints)
-            NSLayoutConstraint.activate(landscapeConstraints)
         }
     }
 }
@@ -126,8 +124,7 @@ extension HomeScreen: ViewCode {
     }
     
     func setupConstraints() {
-        // Portrait Constraints
-        portraitConstraints = [
+        NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -142,28 +139,10 @@ extension HomeScreen: ViewCode {
             welcomeButton.heightAnchor.constraint(equalToConstant: 60),
             welcomeButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 60),
             welcomeButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -60),
-        ]
-        
-        // Landscape Constraints
-        landscapeConstraints = [
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            
-            welcomeLabel.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 150),
-            welcomeLabel.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -150),
-            
-            welcomeButton.heightAnchor.constraint(equalToConstant: 60),
-            welcomeButton.widthAnchor.constraint(equalToConstant: 200),
-        ]
+        ])
     }
     
     func setupStyle() {
         backgroundColor = UIColor.background
     }
 }
-
-//#Preview {
-//    UINavigationController(rootViewController: HomeVC())
-//}

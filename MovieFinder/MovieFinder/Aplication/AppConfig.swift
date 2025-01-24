@@ -7,12 +7,24 @@
 
 import Foundation
 
+/// A configuration class for setting up the application's service factory.
+///
+/// This class determines whether to use the development or production service factory
+/// based on the build configuration. It provides a static property `serviceFactory`
+/// that returns an instance of `ServiceFactoryProtocol`.
 final class AppConfig {
-    static let currentDevelopmentStatus: DevelopmentStatus = {
+    
+    /// A static property that returns the appropriate service factory
+    /// based on the current build configuration.
+    ///
+    /// - Returns: An instance of a type conforming to `ServiceFactoryProtocol`.
+    static let serviceFactory: ServiceFactoryProtocol = {
 #if DEBUG
-        return .development
+        print("Development mode")
+        return DevelopmentServiceFactory()
 #else
-        return .production
+        print("Production mode")
+        return ProductionServiceFactory()
 #endif
     }()
 }
