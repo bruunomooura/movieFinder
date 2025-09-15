@@ -39,6 +39,8 @@
 		3F535AC32E785C590020EA95 /* MovieHeaderTableViewCellPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F535AC22E785C590020EA95 /* MovieHeaderTableViewCellPage.swift */; };
 		3F535AC52E785C6F0020EA95 /* SimilarMovieTableViewCellPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F535AC42E785C6F0020EA95 /* SimilarMovieTableViewCellPage.swift */; };
 		3F535AC72E785D0F0020EA95 /* HomeToMovieDetailsE2ETests.swift in Resources */ = {isa = PBXBuildFile; fileRef = 3F535AC62E785D0F0020EA95 /* HomeToMovieDetailsE2ETests.swift */; };
+		3F535ACA2E7863E10020EA95 /* HomeViewModelDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F535AC92E7863E10020EA95 /* HomeViewModelDelegateSpy.swift */; };
+		3F535ACD2E7864060020EA95 /* HomeViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F535ACC2E7864060020EA95 /* HomeViewModelTests.swift */; };
 		3F601DDB2D3F15FC004F08AF /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601DDA2D3F15F8004F08AF /* CustomAlert.swift */; };
 		3F601DDE2D3F1D50004F08AF /* DevelopmentServiceFactory.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601DDD2D3F1D4C004F08AF /* DevelopmentServiceFactory.swift.swift */; };
 		3F601DE02D3F1D58004F08AF /* ProductionServiceFactory.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F601DDF2D3F1D57004F08AF /* ProductionServiceFactory.swift.swift */; };
@@ -121,6 +123,8 @@
 		3F535AC22E785C590020EA95 /* MovieHeaderTableViewCellPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHeaderTableViewCellPage.swift; sourceTree = "<group>"; };
 		3F535AC42E785C6F0020EA95 /* SimilarMovieTableViewCellPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMovieTableViewCellPage.swift; sourceTree = "<group>"; };
 		3F535AC62E785D0F0020EA95 /* HomeToMovieDetailsE2ETests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeToMovieDetailsE2ETests.swift; sourceTree = "<group>"; };
+		3F535AC92E7863E10020EA95 /* HomeViewModelDelegateSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelDelegateSpy.swift; sourceTree = "<group>"; };
+		3F535ACC2E7864060020EA95 /* HomeViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTests.swift; sourceTree = "<group>"; };
 		3F601DDA2D3F15F8004F08AF /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		3F601DDD2D3F1D4C004F08AF /* DevelopmentServiceFactory.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopmentServiceFactory.swift.swift; sourceTree = "<group>"; };
 		3F601DDF2D3F1D57004F08AF /* ProductionServiceFactory.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductionServiceFactory.swift.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 		3F535AB22E6A18B60020EA95 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				3F535AC82E7863D90020EA95 /* Home */,
 				3F535AB32E6A18C60020EA95 /* MovieDetails */,
 			);
 			path = Sources;
@@ -270,6 +275,23 @@
 				3F535AC42E785C6F0020EA95 /* SimilarMovieTableViewCellPage.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		3F535AC82E7863D90020EA95 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3F535AC92E7863E10020EA95 /* HomeViewModelDelegateSpy.swift */,
+				3F535ACB2E7863EB0020EA95 /* ViewModel */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		3F535ACB2E7863EB0020EA95 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				3F535ACC2E7864060020EA95 /* HomeViewModelTests.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		3F601DDC2D3F1D3A004F08AF /* ServiceFactories */ = {
@@ -754,6 +776,8 @@
 			files = (
 				3F535AB12E6A189C0020EA95 /* MovieDetailsViewModelTests.swift in Sources */,
 				3FD6285A2D3BE9420059116F /* MovieFinderTests.swift in Sources */,
+				3F535ACA2E7863E10020EA95 /* HomeViewModelDelegateSpy.swift in Sources */,
+				3F535ACD2E7864060020EA95 /* HomeViewModelTests.swift in Sources */,
 				3F535AB62E76FDC10020EA95 /* MovieDetailsViewModelDelegateSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

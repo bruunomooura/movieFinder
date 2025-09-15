@@ -25,7 +25,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         screen?.delegate(delegate: self)
-        viewModel.delegate(delegate: self)
+        viewModel.delegate = self
         viewModel.setupTitles()
         setupNavigationBar()
         // Do any additional setup after loading the view.
