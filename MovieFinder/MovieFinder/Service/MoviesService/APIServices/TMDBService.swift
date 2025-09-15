@@ -15,12 +15,7 @@ class TMDBService {
         self.session = session
         self.decoderService = decoderService
     }
-    
-    /// Performs an asynchronous network request and decodes the response into a specified type.
-    ///
-    /// - Parameter url: The URL to which the request is sent.
-    /// - Returns: A decoded object of type `T`, where `T` conforms to `Decodable`.
-    /// - Throws: An error of type `MoviesLoadingError` if the request fails, or an error if decoding fails.
+
     func performRequest<T: Decodable>(url: URL) async throws -> T {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -33,17 +28,24 @@ class TMDBService {
         
         let (data, response) = try await session.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else { throw MoviesLoadingError.errorReceivingData }
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.unknown(description: "Invalid response")
+        }
+              
+        guard httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299 else {
+            throw NetworkError.serverError(code: httpResponse.statusCode)
+        }
         
         do {
             return try decoderService.decode(T.self, from: data)
+        } catch is DecodingError {
+            throw NetworkError.decodingError
+        } catch URLError.notConnectedToInternet {
+            throw NetworkError.noInternet
+        } catch URLError.timedOut {
+            throw NetworkError.timeout
         } catch {
-            throw error
+            throw NetworkError.unknown(description: error.localizedDescription)
         }
     }
-}
-
-// Enum that represents the possible errors that may occur when loading an image
-enum MoviesLoadingError: Swift.Error {
-    case errorReceivingData
 }

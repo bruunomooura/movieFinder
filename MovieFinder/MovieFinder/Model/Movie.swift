@@ -33,6 +33,27 @@ struct Movie: Decodable {
         case voteCount = "vote_count"
     }
     
+    init(
+        backdropPath: String,
+        genreIDs: [Int]?,
+        id: Int,
+        popularity: Double,
+        posterPath: String,
+        releaseDate: String,
+        title: String,
+        voteCount: Int
+    ) {
+        self.backdropPath = backdropPath
+        self.genreIDs = genreIDs
+        self.id = id
+        self.popularity = popularity
+        self.posterPath = posterPath
+        self.releaseDate = releaseDate
+        self.title = title
+        self.voteCount = voteCount
+    }
+    
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         backdropPath = try container.decodeIfPresent(String.self, forKey: .backdropPath) ?? ""
@@ -50,18 +71,6 @@ struct Movie: Decodable {
         }
     }
     
-    /// Generates the complete URL for the movie's image based on its type (poster or backdrop).
-    ///
-    /// This function combines the base image URL, a specified image size, and the corresponding image path (either `backdropPath` or `posterPath`) of the movie.
-    ///
-    /// - Parameters:
-    ///   - size: The desired image size. The default value is `.w185`, which corresponds to a specific image resolution.
-    ///   - pathImage: The type of image path to use, either `.backdropPath` or `.posterPath`. The default is `.posterPath`.
-    ///
-    /// - Note: If the specified image path is empty, the function will return an empty string.
-    /// - Note: The image size is currently hardcoded as `w185`, but it can be changed by passing a different value to the `size` parameter.
-    ///
-    /// - Returns: A `String` representing the complete URL to access the movie's image. Returns an empty string if the image path is empty.
     func imageURL(size: TMDBImageSize = .w185, pathImage: TMDBImagePath = .posterPath) -> String {
         switch pathImage {
         case .backdropPath:
@@ -81,15 +90,6 @@ struct Movie: Decodable {
         return releaseDate.extractYear(fromFormat: "yyyy-MM-dd")
     }
     
-    /// Translates genre IDs to their corresponding genre names.
-    ///
-    /// This function takes a dictionary mapping genre IDs to their corresponding genre names and returns a `String`
-    /// containing the genre names associated with the first two genre IDs in the given array. If the `genreIDs`
-    /// property is `nil` or empty, it returns an error message.
-    ///
-    /// - Parameter mappingGenres: A dictionary where the keys are `Int` genre IDs and the values are `String` genre names.
-    /// - Returns: A `String` representing the genre names associated with the first two genre IDs. If only one genre ID
-    ///   exists, it returns the name of that genre. If no genre IDs exist, it returns `"Error"`.
     func genreNames(using mappingGenres: [Int: String]) -> String {
         guard let genreIDs = self.genreIDs, !genreIDs.isEmpty else {
             return ""
@@ -101,5 +101,21 @@ struct Movie: Decodable {
             let genres = genreIDs.prefix(2).compactMap { mappingGenres[$0] }
             return "\(genres[0]), \(genres[1])"
         }
+    }
+}
+
+extension Movie {
+    static func with(
+        movie: Movie = Movie(
+            backdropPath: "/zOpe0eHsq0A2NvNyBbtT6sj53qV.jpg",
+            genreIDs: [16, 12, 14],
+            id: 939243,
+            popularity: 2596.305,
+            posterPath: "/8HzA55GCjRTEC2YhPGna8Lc8qHo.jpg",
+            releaseDate: "2024-12-19",
+            title: "Sonic 3: O Filme",
+            voteCount: 638)
+    ) -> Movie {
+        return movie
     }
 }
