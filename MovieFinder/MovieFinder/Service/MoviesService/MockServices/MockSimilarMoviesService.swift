@@ -8,29 +8,24 @@
 import Foundation
 
 final class MockSimilarMoviesService: SimilarMoviesServiceProtocol {
-    private let decoderService: JSONDecoderService
+    var result: Result<MovieResponse, Error>
     
-    init(decoderService: JSONDecoderService = JSONDecoderService()) {
-        self.decoderService = decoderService
+    init(result: Result<MovieResponse, Error>) {
+        self.result = result
     }
     
-    /// Fetches related movies from a local JSON file for testing or mocking purposes.
-    ///
-    /// - Parameters:
-    ///   - movieId: An integer representing the unique identifier of the movie (not used in this implementation).
-    ///   - language: A string representing the language for the related movie details (not used in this implementation).
-    /// - Returns: A `MovieResponse` object containing the fetched related movies.
-    /// - Throws: An error of type `MoviesLoadingError` if the JSON file cannot be found or if an error occurs during data loading or decoding.
-    func fetchRelatedMovies(movieId: Int, language: String) async throws -> MovieResponse {
-        guard let url = Bundle.main.url(forResource: JSONFile.similarMovies.rawValue, withExtension: JSONFile.json.rawValue) else { throw MoviesLoadingError.errorReceivingData }
-        
+    convenience init() {
         do {
-            let data = try Data(contentsOf: url)
-            let relatedMovies: MovieResponse = try decoderService.decode(MovieResponse.self, from: data)
-            return relatedMovies
+            let similarMovies = try DefaultJSONMockLoader().load(
+                JSONFile.similarMovies.rawValue,
+                as: MovieResponse.self)
+            self.init(result: .success(similarMovies))
         } catch {
-            print("Error: \(error.localizedDescription)")
-            throw error
+            self.init(result: .failure(error))
         }
+    }
+    
+    public func fetchRelatedMovies(movieId: Int, language: String) async throws -> MovieResponse {
+        return try result.get()
     }
 }

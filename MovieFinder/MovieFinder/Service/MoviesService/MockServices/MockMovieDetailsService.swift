@@ -8,31 +8,24 @@
 import Foundation
 
 final class MockMovieDetailsService: MovieDetailsServiceProtocol {
-    private let decoderService: JSONDecoderService
+    var result: Result<Movie, Error>
     
-    init(decoderService: JSONDecoderService = JSONDecoderService()) {
-        self.decoderService = decoderService
+    init(result: Result<Movie, Error>) {
+        self.result = result
     }
     
-    /// Fetches movie details from a local JSON file for testing or mocking purposes.
-    ///
-    /// - Parameters:
-    ///   - movieId: An integer representing the unique identifier of the movie (not used in this implementation).
-    ///   - language: A string representing the language for the movie details (not used in this implementation).
-    /// - Returns: A `Movie` object containing the fetched movie details.
-    /// - Throws: An error of type `MoviesLoadingError` if the JSON file cannot be found or if an error occurs during data loading or decoding.
-    func fetchMovieDetails(movieId: Int, language: String) async throws -> Movie {
-        guard let url = Bundle.main.url(forResource: JSONFile.movieDetailsData.rawValue, withExtension: JSONFile.json.rawValue) else {
-            throw MoviesLoadingError.errorReceivingData
-        }
-        
+    convenience init() {
         do {
-            let data = try Data(contentsOf: url)
-            let movies: Movie = try decoderService.decode(Movie.self, from: data)
-            return movies
+            let movie = try DefaultJSONMockLoader().load(
+                JSONFile.movieDetailsData.rawValue,
+                as: Movie.self)
+            self.init(result: .success(movie))
         } catch {
-            print("Error: \(error.localizedDescription)")
-            throw MoviesLoadingError.errorReceivingData
+            self.init(result: .failure(error))
         }
+    }
+    
+    public func fetchMovieDetails(movieId: Int, language: String) async throws -> Movie {
+        return try result.get()
     }
 }

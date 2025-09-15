@@ -8,18 +8,29 @@
 import UIKit
 
 class MovieDetailsVC: UIViewController {
-    
-    var viewModel: MovieDetailsViewModel = MovieDetailsViewModel()
-    var screen: MovieDetailsScreen?
+    let viewModel: MovieDetailsViewModelProtocol
+    let screen: MovieDetailsScreen
     var customAlert: CustomAlert?
     private var tableViewDataSource: MoviesDetailsTableViewDataSource?
+    
+    init(viewModel: MovieDetailsViewModelProtocol = MovieDetailsViewModel(),
+         screen: MovieDetailsScreen = MovieDetailsScreen(),
+         tableViewDataSource: MoviesDetailsTableViewDataSource = MoviesDetailsTableViewDataSource()) {
+        self.viewModel = viewModel
+        self.screen = screen
+        self.tableViewDataSource = tableViewDataSource
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
         setupViewModel()
         setupTableView()
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -27,7 +38,6 @@ class MovieDetailsVC: UIViewController {
     }
     
     override func loadView() {
-        self.screen = MovieDetailsScreen()
         view = screen
     }
     
@@ -59,7 +69,7 @@ extension MovieDetailsVC {
     // MARK: - ViewModel Configuration
     /// Configures the ViewModel by setting the delegate and initiating the data loading process.
     private func setupViewModel() {
-        viewModel.delegate(delegate: self)
+        viewModel.delegate = self
         loadDataPrimary()
     }
     
@@ -82,11 +92,10 @@ extension MovieDetailsVC {
     // MARK: - TableView Setup
     /// Initializes and configures the TableView DataSource and connects it to the screen.
     private func setupTableView() {
-        tableViewDataSource = MoviesDetailsTableViewDataSource()
         tableViewDataSource?.delegateMovieHeader = self
         guard let dataSource = tableViewDataSource else { return }
         let navigationBarHeight = navigationController?.navigationBar.frame.height ?? 0
-        screen?.setupTableView(dataSourceAndDelegate: dataSource, contentInsetTop: navigationBarHeight)
+        screen.setupTableView(dataSourceAndDelegate: dataSource, contentInsetTop: navigationBarHeight)
     }
 }
 
@@ -96,7 +105,7 @@ extension MovieDetailsVC: MovieHeaderTableViewCellDelegate {
     ///
     /// - Parameter sender: The UIButton that triggered the event.
     func didSelectedLikeButton(_ sender: UIButton) {
-        screen?.reloadTableView()
+        screen.reloadTableView()
     }
 }
 
@@ -107,8 +116,8 @@ extension MovieDetailsVC: MovieDetailsViewModelDelegate {
     /// - Parameter movieDetails: The Movie object containing the loaded details.
     func loadMovieDetailsSuccess(movieDetails: Movie?) {
         tableViewDataSource?.setupInitialData(movieDetails: movieDetails)
-        screen?.noResults(noResults: false)
-        screen?.reloadTableView()
+        screen.noResults(noResults: false)
+        screen.reloadTableView()
     }
     
     /// Called when genres and similar movies are successfully loaded.
@@ -120,19 +129,23 @@ extension MovieDetailsVC: MovieDetailsViewModelDelegate {
     func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int : String], similarMovies: [Movie], _ indexPath: [IndexPath]) {
         tableViewDataSource?.setupSecondaryData(genresDictionary: genresDictionary,
                                                 similarMovies: similarMovies)
-        screen?.noResults(noResults: false)
-        screen?.insertRowsTableView(indexPaths: indexPath)
+        screen.noResults(noResults: false)
+        screen.insertRowsTableView(indexPaths: indexPath)
     }
     
     /// Called when there is an error loading data.
     ///
     /// - Parameter message: The error message to be displayed.
     func errorLoadingData(message: String) {
-        screen?.noResults(noResults: true)
+        screen.noResults(noResults: true)
         if customAlert == nil {
             customAlert = CustomAlert(parentView: self.view)
         }
         
-        customAlert?.showAlert(title: "Connection Error", message: "Check your internet connection. themoviedb.org may also be unavailable.")
+        customAlert?.showAlert(title: "Connection Error", message: message)
+    }
+    
+    func showNoSimilarMoviesFound() {
+        screen.noResults(noResults: true)
     }
 }
