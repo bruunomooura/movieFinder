@@ -12,17 +12,24 @@ protocol MovieDetailsViewModelDelegate: AnyObject {
     func errorLoadingData(message: String)
     func loadMovieDetailsSuccess(movieDetails: Movie?)
     func loadGenresAndSimilarMoviesSuccess(genresDictionary: [Int: String], similarMovies: [Movie], _ indexPath: [IndexPath])
+    func showNoSimilarMoviesFound()
 }
 
-final class MovieDetailsViewModel {
+protocol MovieDetailsViewModelProtocol: AnyObject {
+    var delegate: MovieDetailsViewModelDelegate? { get set }
+    func loadMovieDetails() async
+    func loadGenresAndSimilarMovies() async
+}
+
+final class MovieDetailsViewModel: MovieDetailsViewModelProtocol {
     private let genreServiceProtocol: GenreServiceProtocol
     private let movieDetailsServiceProtocol: MovieDetailsServiceProtocol
     private let similarMoviesServiceProtocol: SimilarMoviesServiceProtocol
-    private weak var delegate: MovieDetailsViewModelDelegate?
+    weak var delegate: MovieDetailsViewModelDelegate?
     private var genresDictionary: [Int: String] = [:]
     private var movieDetails: Movie?
     private var similarMoviesList: [Movie] = []
-    private var isLoading: Bool = .init()
+    private(set) var isLoading: Bool = .init()
     private let movieId: Int = 68721
     private let language: String = "pt-BR"
     private let currentPage: Int = 1
@@ -37,14 +44,7 @@ final class MovieDetailsViewModel {
 }
 
 // MARK: - Functions
-extension MovieDetailsViewModel {
-    /// Sets the delegate for the MovieDetailsViewModel.
-    ///
-    /// - Parameter delegate: The delegate object conforming to the `MovieDetailsViewModelDelegate` protocol.
-    public func delegate(delegate: MovieDetailsViewModelDelegate?) {
-        self.delegate = delegate
-    }
-    
+extension MovieDetailsViewModel {    
     /// Asynchronously loads movie details.
     public func loadMovieDetails() async {
         isLoading = true
@@ -84,16 +84,25 @@ extension MovieDetailsViewModel {
             let genresResult = try await genres
             let similarMoviesResult = try await similarMovies
             
-            configGenresDictionary(with: genresResult.genres)
-            self.similarMoviesList = similarMoviesResult.results
-            let indexPath = defineIndexPath(similarMovies: similarMoviesResult.results)
-            
-            await MainActor.run { [weak self] in
-                guard let self = self else { return }
-                self.isLoading = false
-                self.delegate?.loadGenresAndSimilarMoviesSuccess(
-                    genresDictionary: self.genresDictionary,
-                    similarMovies: self.similarMoviesList, indexPath)
+            if similarMoviesResult.results.isEmpty {
+                await MainActor.run { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    self.delegate?.showNoSimilarMoviesFound()
+                }
+            } else {
+                configGenresDictionary(with: genresResult.genres)
+                self.similarMoviesList = similarMoviesResult.results
+                let indexPath = defineIndexPath(similarMovies: similarMoviesResult.results)
+                
+                await MainActor.run { [weak self] in
+                    guard let self = self else { return }
+                    self.isLoading = false
+                    self.delegate?.loadGenresAndSimilarMoviesSuccess(
+                        genresDictionary: self.genresDictionary,
+                        similarMovies: self.similarMoviesList,
+                        indexPath)
+                }
             }
         } catch {
             await MainActor.run { [weak self] in

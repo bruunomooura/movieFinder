@@ -131,6 +131,11 @@ extension SimilarMovieTableViewCell {
         movieTitleLabel.accessibilityHint = movie.title
         movieReleaseLabel.accessibilityHint = movie.releaseYear
         movieGenresLabel.accessibilityHint = genresMovie
+        
+        moviePosterImageView.accessibilityIdentifier = "similarMovieCell.poster"
+        movieTitleLabel.accessibilityIdentifier = "similarMovieCell.title"
+        movieReleaseLabel.accessibilityIdentifier = "similarMovieCell.releaseYear"
+        movieGenresLabel.accessibilityIdentifier = "similarMovieCell.genres"
     }
 }
 

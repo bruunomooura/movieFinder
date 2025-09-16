@@ -92,11 +92,15 @@ extension HomeScreen {
     ///   - welcomeLabelText: The text to be displayed on the welcome label.
     ///   - welcomeButtonTitle: The title to be displayed on the welcome button.
     public func setupTitles(_ welcomeLabelText: String, _ welcomeButtonTitle: String) {
+        logoImageView.accessibilityIdentifier = "logoImageView"
+        
         welcomeLabel.text = welcomeLabelText
         welcomeLabel.accessibilityLabel = welcomeLabelText
+        welcomeLabel.accessibilityIdentifier = "welcomeLabel"
         
         welcomeButton.setTitle(welcomeButtonTitle, for: .normal)
         welcomeButton.accessibilityLabel = welcomeButtonTitle
+        welcomeButton.accessibilityIdentifier = "welcomeButton"
     }
     
     /// Handles the tap event for the welcome button.
