@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "CBDB620D-32AD-4927-A8E9-6A7592793C5D",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:MovieFinder.xcodeproj",
+      "identifier" : "3FD6280F2D3BE8ED0059116F",
+      "name" : "MovieFinder"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MovieFinder.xcodeproj",
+        "identifier" : "3FD628282D3BE8EF0059116F",
+        "name" : "MovieFinderTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:MovieFinder.xcodeproj",
+        "identifier" : "3FD628322D3BE8EF0059116F",
+        "name" : "MovieFinderUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

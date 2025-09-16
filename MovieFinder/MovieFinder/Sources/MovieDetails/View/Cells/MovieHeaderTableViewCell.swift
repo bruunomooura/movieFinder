@@ -33,12 +33,14 @@ class MovieHeaderTableViewCell: UITableViewCell {
         label.isAccessibilityElement = true
         label.accessibilityLabel = "movieDetails.movieTitle.accessibilityLabel".localized
         label.accessibilityTraits = .none
+        label.accessibilityIdentifier = "movieTitleLabel"
         return label
     }()
     
     private lazy var likeButton: UIButton = {
         let button: UIButton = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityIdentifier = "likeButton"
         
         var configurationButton = UIButton.Configuration.filled()
         configurationButton.contentInsets = .init(top: 15, leading: 15, bottom: 15, trailing: 15)
@@ -105,6 +107,8 @@ extension MovieHeaderTableViewCell {
         setupStatsViews(likesValue: movie.voteCount.formatAsAbbreviated(),
                         popularityValue: Int(movie.popularity).formatAsAbbreviated())
         updateLikeButtonImage()
+        likeCount.accessibilityIdentifier = "likeCount"
+        popularityCount.accessibilityIdentifier = "popularityCount"
     }
     
     // MARK: Private Methods
@@ -124,10 +128,14 @@ extension MovieHeaderTableViewCell {
     
     private func setupStatsViews(likesValue: String, popularityValue: String) {
         let heartIcon = UIImage(systemName: SystemImage.heartFill.rawValue)
-        likeCount.setupComponent(icon: heartIcon, title: String(format: "movieDetails.likeCount".localized, likesValue))
+        likeCount.setupComponent(icon: heartIcon,
+                                 title: String(format: "movieDetails.likeCount".localized, likesValue),
+                                 identifier: "likeCount")
         
         let starIcon = UIImage(systemName: SystemImage.starFill.rawValue)
-        popularityCount.setupComponent(icon: starIcon, title: String(format: "movieDetails.popularity".localized, popularityValue))
+        popularityCount.setupComponent(icon: starIcon,
+                                       title: String(format: "movieDetails.popularity".localized, popularityValue),
+                                       identifier: "popularityCount")
     }
     
     private func updateLikeButtonImage() {

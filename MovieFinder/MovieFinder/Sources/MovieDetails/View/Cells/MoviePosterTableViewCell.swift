@@ -17,6 +17,7 @@ final class MoviePosterTableViewCell: UITableViewCell {
         imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .clear
         imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier = "moviePosterImageView"
         return imageView
     }()
     
