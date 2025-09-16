@@ -32,15 +32,12 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Verifica se está na home screen
         XCTAssertTrue(homePage.logoImage.exists)
         XCTAssertTrue(homePage.welcomeLabel.exists)
         XCTAssertTrue(homePage.welcomeButton.exists)
         
-        // Navega para a tela de detalhes
         homePage.tapWelcomeButton()
         
-        // Verifica se chegou na tela de detalhes
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 5))
     }
     
@@ -48,16 +45,12 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Navega para os detalhes
         homePage.tapWelcomeButton()
         
-        // Verifica se a tabela existe
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 5))
         
-        // Verifica se o poster existe
         XCTAssertTrue(movieDetailsPage.posterCell.image.exists)
         
-        // Verifica se o header existe
         XCTAssertTrue(movieDetailsPage.headerCell.movieTitleLabel.exists)
         XCTAssertTrue(movieDetailsPage.headerCell.likeButton.exists)
         XCTAssertTrue(movieDetailsPage.headerCell.likeCountLabel.exists)
@@ -68,20 +61,15 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Navega para os detalhes
         homePage.tapWelcomeButton()
         
-        // Aguarda o carregamento da tela
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 5))
         
-        // Captura o botão de like
         let likeButton = movieDetailsPage.headerCell.likeButton
         XCTAssertTrue(likeButton.exists)
         
-        // Toca no botão de like
         movieDetailsPage.headerCell.tapFavorite()
         
-        // Verifica se o botão ainda existe após o tap
         XCTAssertTrue(likeButton.exists)
     }
     
@@ -89,16 +77,12 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Navega para os detalhes
         homePage.tapWelcomeButton()
         
-        // Aguarda o carregamento
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 5))
         
-        // Rola para baixo para ver os filmes similares
         movieDetailsPage.table.swipeUp()
         
-        // Verifica se existem filmes similares
         if !movieDetailsPage.similarCells.isEmpty {
             let firstSimilarMovie = movieDetailsPage.similarCells[0]
             XCTAssertTrue(firstSimilarMovie.poster.exists)
@@ -112,16 +96,12 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Navega para os detalhes
         homePage.tapWelcomeButton()
         
-        // Verifica se está na tela de detalhes
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 5))
         
-        // Volta para a home (assumindo que há um botão de volta)
         app.navigationBars.buttons.element(boundBy: 0).tap()
         
-        // Verifica se voltou para a home
         XCTAssertTrue(homePage.welcomeButton.waitForExistence(timeout: 5))
         XCTAssertTrue(homePage.logoImage.exists)
     }
@@ -130,13 +110,11 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // Configure seu app para simular um estado de erro/sem resultados
         app.launchArguments.append("UITestingNoResults")
         app.launch()
         
         homePage.tapWelcomeButton()
         
-        // Verifica se a mensagem de "sem resultados" aparece
         XCTAssertTrue(movieDetailsPage.noResultsLabel.waitForExistence(timeout: 10))
         XCTAssertTrue(movieDetailsPage.noResultsLabel.isHittable)
         XCTAssertFalse(movieDetailsPage.table.isHittable)
@@ -146,26 +124,20 @@ final class HomeToMovieDetailsE2ETests: XCTestCase {
         let homePage = HomeScreenPage(app: app)
         let movieDetailsPage = MovieDetailsScreenPage(app: app)
         
-        // 1. Verifica tela inicial
         XCTAssertTrue(homePage.logoImage.exists)
         XCTAssertTrue(homePage.welcomeLabel.exists)
         XCTAssertTrue(homePage.welcomeButton.exists)
         
-        // 2. Navega para detalhes
         homePage.tapWelcomeButton()
         
-        // 3. Verifica carregamento dos detalhes
         XCTAssertTrue(movieDetailsPage.table.waitForExistence(timeout: 10))
         XCTAssertTrue(movieDetailsPage.posterCell.image.exists)
         XCTAssertTrue(movieDetailsPage.headerCell.movieTitleLabel.exists)
         
-        // 4. Interage com o conteúdo
         movieDetailsPage.headerCell.tapFavorite()
         
-        // 5. Explora filmes similares
         movieDetailsPage.table.swipeUp()
         
-        // 6. Volta para a home
         app.navigationBars.buttons.element(boundBy: 0).tap()
         XCTAssertTrue(homePage.welcomeButton.waitForExistence(timeout: 5))
     }
