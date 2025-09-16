@@ -51,11 +51,11 @@ public class StatsView: UIView {
     /// - Parameters:
     ///   - icon: The `UIImage` to display as the icon. Pass `nil` if no icon is needed.
     ///   - title: A `String` representing the title to display next to the icon.
-    public func setupComponent(icon: UIImage?, title: String) {
+    public func setupComponent(icon: UIImage?, title: String, identifier: String) {
         iconImageView.image = icon
         infoLabel.text = title
         
-        configureAccessibility(with: title)
+        configureAccessibility(with: title, identifier: identifier)
         
         setup()
         
@@ -72,9 +72,12 @@ public class StatsView: UIView {
     /// to ensure the component is accessible and descriptive.
     ///
     /// - Parameter title: The `String` to use as the accessibility label.
-    private func configureAccessibility(with title: String) {
+    private func configureAccessibility(with title: String, identifier: String) {
         infoLabel.accessibilityLabel = title
         infoLabel.accessibilityTraits = .none
+        self.accessibilityIdentifier = identifier
+        infoLabel.accessibilityIdentifier = "\(identifier).label"
+        iconImageView.accessibilityIdentifier = "\(identifier).icon"
     }
 }
 // MARK: - ViewCode Protocol Conformance

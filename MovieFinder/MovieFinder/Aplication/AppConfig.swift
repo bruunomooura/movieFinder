@@ -19,6 +19,10 @@ final class AppConfig {
     ///
     /// - Returns: An instance of a type conforming to `ServiceFactoryProtocol`.
     static let serviceFactory: ServiceFactoryProtocol = {
+        if ProcessInfo.processInfo.arguments.contains("UITestingNoResults") {
+            return EmptyMocksServiceFactory()
+        }
+        
 #if DEBUG
         print("Development mode")
         return DevelopmentServiceFactory()

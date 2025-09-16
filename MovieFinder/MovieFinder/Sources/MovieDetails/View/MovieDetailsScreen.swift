@@ -33,6 +33,7 @@ class MovieDetailsScreen: UIView {
         label.textColor = .background
         label.isHidden = true
         label.accessibilityLabel = "movieDetails.noResultsLabel.accessibilityLabel".localized
+        label.accessibilityIdentifier = "noResultsLabel"
         return label
     }()
     
@@ -64,6 +65,7 @@ extension MovieDetailsScreen {
         tableView.dataSource = dataSourceAndDelegate
         tableView.scrollIndicatorInsets.top = -(contentInsetTop * 2)
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.accessibilityIdentifier = "movieDetailsTableView"
     }
     
     // MARK: Reload Table View

@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "B6590168-5154-43D1-992B-E7E891C6CE48",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:MovieFinder.xcodeproj",
+        "identifier" : "3FD628322D3BE8EF0059116F",
+        "name" : "MovieFinderUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
